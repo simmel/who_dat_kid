@@ -1,0 +1,13 @@
+[package]
+name = "who_dat_kid"
+version = "0.1.0"
+description = "An identd for my kid"
+authors = ["Simon Lundström <simmel@soy.se>"]
+edition = "2018"
+homepage = "https://github.com/simmel/who_dat_kid"
+repository = "https://github.com/simmel/who_dat_kid"
+license = "ISC"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
