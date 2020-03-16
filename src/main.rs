@@ -1,9 +1,41 @@
+use std::num::ParseIntError;
+use std::str::FromStr;
+
+#[derive(Debug, PartialEq)]
+struct Ident {
+  remote_port: i32,
+  local_port: i32,
+}
+
+impl FromStr for Ident {
+  type Err = ParseIntError;
+
+  fn from_str(s: &str) -> Result<Self, Self::Err> {
+    let coords: Vec<&str> = s
+      .trim_matches(|p| p == ' ' || p == '\r' || p == '\n')
+      .split(|c| c == ',' || c == ':')
+      .collect();
+
+    let remote_port_fromstr = coords[0].parse::<i32>()?;
+    let local_port_fromstr = coords[1].parse::<i32>()?;
+
+    Ok(Ident {
+      remote_port: remote_port_fromstr,
+      local_port: local_port_fromstr,
+    })
+  }
+}
+
 const IDENT_ERROR: &str = ":ERROR:UNKNOWN-ERROR\r\n";
 
 // FIXME: Add get ports from request
 fn show_fake_id(ident_request: &String) -> String {
   let error = String::from(IDENT_ERROR);
   return error;
+}
+
+fn get_ports(ident_request: &String) -> Result<Ident, ParseIntError> {
+  return Ident::from_str(ident_request);
 }
 
 #[test]
@@ -13,9 +45,15 @@ fn bogus_request() {
 }
 
 #[test]
-fn correct_request() {
-  let reply = show_fake_id(&String::from("13,37\r\n"));
-  assert_eq!(reply, String::from("13,37:USERID:UNIX:aerokid"));
+fn correct_ports() {
+  let p = get_ports(&String::from("13,37\r\n"));
+  assert_eq!(
+    p.unwrap(),
+    Ident {
+      remote_port: 13,
+      local_port: 37
+    }
+  )
 }
 
 fn main() {
