@@ -38,6 +38,13 @@ fn get_ports(ident_request: &String) -> Result<Ident, ParseIntError> {
   return Ident::from_str(ident_request);
 }
 
+fn create_reply(ident_request: &Ident) -> String {
+  return String::from(format!(
+    "{},{}:USERID:UNIX:aerokid\r\n",
+    ident_request.remote_port, ident_request.local_port,
+  ));
+}
+
 #[test]
 fn bogus_request() {
   let reply = show_fake_id(&String::from("GURKEN"));
