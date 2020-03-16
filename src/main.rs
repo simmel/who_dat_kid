@@ -62,6 +62,11 @@ fn correct_ports() {
     }
   )
 }
+#[test]
+fn bogus_ports() {
+  let p = get_ports(&String::from("pewpew\r\n"));
+  assert!(p.is_err())
+}
 
 #[test]
 fn correct_reply() {
