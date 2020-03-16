@@ -28,10 +28,12 @@ impl FromStr for Ident {
 
 const IDENT_ERROR: &str = ":ERROR:UNKNOWN-ERROR\r\n";
 
-// FIXME: Add get ports from request
 fn show_fake_id(ident_request: &String) -> String {
-  let error = String::from(IDENT_ERROR);
-  return error;
+  let ports = get_ports(ident_request);
+  match ports {
+    Ok(ident) => create_reply(&ident),
+    Err(_) => String::from(IDENT_ERROR),
+  }
 }
 
 fn get_ports(ident_request: &String) -> Result<Ident, ParseIntError> {
