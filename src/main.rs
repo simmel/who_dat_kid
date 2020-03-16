@@ -56,6 +56,15 @@ fn correct_ports() {
   )
 }
 
+#[test]
+fn correct_reply() {
+  let p = create_reply(&Ident {
+    remote_port: 13,
+    local_port: 37,
+  });
+  assert_eq!(p, String::from("13,37:USERID:UNIX:aerokid\r\n"))
+}
+
 fn main() {
   let request = String::from("13,37\r\n");
   let reply = show_fake_id(&request);
