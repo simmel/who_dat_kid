@@ -1,3 +1,4 @@
+use log::{error, info, warn, LevelFilter};
 use std::num::ParseIntError;
 use std::str::FromStr;
 
@@ -86,7 +87,14 @@ fn correct_reply() {
 }
 
 fn main() {
+  env_logger::Builder::from_default_env()
+    .format_level(true)
+    .format_module_path(false)
+    .format_timestamp(None)
+    .filter(None, LevelFilter::Info)
+    .init();
+
   let request = String::from("13,37\r\n");
   let reply = show_fake_id(&request);
-  println!("{}", reply);
+  info!("{}", reply);
 }
