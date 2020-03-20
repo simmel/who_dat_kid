@@ -1,4 +1,4 @@
-use log::{error, info, warn, LevelFilter};
+use log::{debug, error, info, LevelFilter};
 use std::num::ParseIntError;
 use std::str::FromStr;
 
@@ -31,9 +31,16 @@ const IDENT_ERROR: &str = ":ERROR:UNKNOWN-ERROR\r\n";
 
 fn show_fake_id(ident_request: &String) -> String {
   let ports = get_ports(ident_request);
+  let trimmed_ident_request = ident_request.trim_matches(char::from(0));
   match ports {
-    Ok(ident) => create_reply(&ident),
-    Err(_) => String::from(IDENT_ERROR),
+    Ok(ident) => {
+      debug!("Ident request: {:?}", trimmed_ident_request);
+      return create_reply(&ident);
+    }
+    Err(_) => {
+      error!("Bogus ident reply: {:?}", trimmed_ident_request);
+      return String::from(IDENT_ERROR);
+    }
   }
 }
 
