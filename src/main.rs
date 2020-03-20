@@ -4,6 +4,7 @@ use std::net::TcpListener;
 use std::net::TcpStream;
 use std::num::ParseIntError;
 use std::str::FromStr;
+use std::thread;
 
 fn handle_connection(mut stream: TcpStream) {
   let mut buffer = [0; 512];
@@ -122,6 +123,8 @@ fn main() {
   for stream in listener.incoming() {
     let stream = stream.unwrap();
 
-    handle_connection(stream);
+    thread::spawn(move || {
+      handle_connection(stream);
+    });
   }
 }
