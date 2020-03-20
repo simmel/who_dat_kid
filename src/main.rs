@@ -1,6 +1,20 @@
 use log::{debug, error, info, LevelFilter};
+use std::io::prelude::*;
+use std::net::TcpListener;
+use std::net::TcpStream;
 use std::num::ParseIntError;
 use std::str::FromStr;
+
+fn handle_connection(mut stream: TcpStream) {
+  let mut buffer = [0; 512];
+
+  info!("Connection from: {}", stream.peer_addr().unwrap());
+  stream.read(&mut buffer).unwrap();
+
+  let request = String::from_utf8_lossy(&buffer).to_string();
+  let reply = show_fake_id(&request);
+  stream.write(reply.as_bytes()).unwrap();
+}
 
 #[derive(Debug, PartialEq)]
 struct Ident {
@@ -101,7 +115,13 @@ fn main() {
     .filter(None, LevelFilter::Info)
     .init();
 
-  let request = String::from("13,37\r\n");
-  let reply = show_fake_id(&request);
-  info!("{}", reply);
+  let address = "127.0.0.1:1337";
+  let listener = TcpListener::bind(address).unwrap();
+  info!("Listening on {}", address);
+
+  for stream in listener.incoming() {
+    let stream = stream.unwrap();
+
+    handle_connection(stream);
+  }
 }
