@@ -1,20 +1,18 @@
 use log::{debug, error, info, LevelFilter};
-use std::io::prelude::*;
-use std::net::TcpListener;
-use std::net::TcpStream;
 use std::num::ParseIntError;
 use std::str::FromStr;
-use std::thread;
+use tokio::io::{AsyncReadExt, AsyncWriteExt};
+use tokio::net::{TcpListener, TcpStream};
 
-fn handle_connection(mut stream: TcpStream) {
+async fn handle_connection(mut stream: TcpStream) {
   let mut buffer = [0; 512];
 
   info!("Connection from: {}", stream.peer_addr().unwrap());
-  stream.read(&mut buffer).unwrap();
+  stream.read(&mut buffer).await.unwrap();
 
   let request = String::from_utf8_lossy(&buffer).to_string();
   let reply = show_fake_id(&request);
-  stream.write(reply.as_bytes()).unwrap();
+  stream.write(reply.as_bytes()).await.unwrap();
 }
 
 #[derive(Debug, PartialEq)]
@@ -108,7 +106,8 @@ fn correct_reply() {
   assert_eq!(p, String::from("13,37:USERID:UNIX:aerokid\r\n"))
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
   env_logger::Builder::from_default_env()
     .format_level(true)
     .format_module_path(false)
@@ -117,14 +116,14 @@ fn main() {
     .init();
 
   let address = "127.0.0.1:1337";
-  let listener = TcpListener::bind(address).unwrap();
+  let mut listener = TcpListener::bind(address).await.unwrap();
   info!("Listening on {}", address);
 
-  for stream in listener.incoming() {
-    let stream = stream.unwrap();
+  loop {
+    let (stream, _) = listener.accept().await.unwrap();
 
-    thread::spawn(move || {
-      handle_connection(stream);
+    tokio::spawn(async move {
+      handle_connection(stream).await;
     });
   }
 }
