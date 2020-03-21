@@ -13,6 +13,7 @@ async fn handle_connection(mut stream: TcpStream) {
   let request = String::from_utf8_lossy(&buffer)
     .trim_end_matches('\0')
     .to_string();
+  debug!("request: {:#?}", request);
   let reply = show_fake_id(&request);
   stream.write(reply.as_bytes()).await.unwrap();
 }
@@ -27,11 +28,13 @@ impl FromStr for Ident {
   type Err = ParseIntError;
 
   fn from_str(s: &str) -> Result<Self, Self::Err> {
+    debug!("s: {:#?}", s);
     let coords: Vec<&str> = s
       .trim_matches(|p| p == ' ' || p == '\r' || p == '\n')
       .split(|c| c == ',' || c == ':')
       .collect();
 
+    debug!("coords: {:#?}", coords);
     let remote_port_fromstr = coords[0].parse::<i32>()?;
     let local_port_fromstr = coords[1].parse::<i32>()?;
 
@@ -46,6 +49,7 @@ const IDENT_ERROR: &str = ":ERROR:UNKNOWN-ERROR\r\n";
 
 fn show_fake_id(ident_request: &String) -> String {
   let ports = get_ports(ident_request);
+  debug!("Ident request: {:?}", ident_request);
   let trimmed_ident_request = ident_request.trim_matches(char::from(0));
   match ports {
     Ok(ident) => {
