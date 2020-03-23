@@ -17,5 +17,7 @@ jobs:
       run: cargo clippy --verbose
     - name: Run tests
       run: cargo test --verbose
+    - name: Build release for Alpine
+      run: cargo build --release --target x86_64-unknown-linux-musl
     - name: Build container
       run: docker build --tag who_dat_kid:$GITHUB_SHA .
