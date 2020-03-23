@@ -68,10 +68,10 @@ fn get_ports(ident_request: &String) -> Result<Ident, ParseIntError> {
 }
 
 fn create_reply(ident_request: &Ident) -> String {
-  return String::from(format!(
+  return format!(
     "{},{}:USERID:UNIX:aerokid\r\n",
     ident_request.remote_port, ident_request.local_port,
-  ));
+  );
 }
 
 #[test]
