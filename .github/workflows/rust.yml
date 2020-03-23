@@ -1,10 +1,9 @@
+# https://help.github.com/en/actions/configuring-and-managing-workflows/persisting-workflow-data-using-artifacts
 name: Rust
 
 on:
   push:
     branches: [ master ]
-    tags:
-      - *
   pull_request:
     branches: [ master ]
 
