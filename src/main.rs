@@ -47,7 +47,7 @@ impl FromStr for Ident {
 
 const IDENT_ERROR: &str = ":ERROR:UNKNOWN-ERROR\r\n";
 
-fn show_fake_id(ident_request: &String) -> String {
+fn show_fake_id(ident_request: &str) -> String {
   let ports = get_ports(ident_request);
   debug!("Ident request: {:?}", ident_request);
   let trimmed_ident_request = ident_request.trim_matches(char::from(0));
@@ -63,7 +63,7 @@ fn show_fake_id(ident_request: &String) -> String {
   }
 }
 
-fn get_ports(ident_request: &String) -> Result<Ident, ParseIntError> {
+fn get_ports(ident_request: &str) -> Result<Ident, ParseIntError> {
   return Ident::from_str(ident_request);
 }
 
