@@ -17,3 +17,5 @@ jobs:
       run: cargo clippy --verbose
     - name: Run tests
       run: cargo test --verbose
+    - name: Build container
+      run: docker build --tag who_dat_kid:$GITHUB_SHA .
