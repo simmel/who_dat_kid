@@ -3,19 +3,48 @@ name: Rust
 on:
   push:
     branches: [ master ]
+    tags:
+      - *
   pull_request:
     branches: [ master ]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: clippy
       run: cargo clippy --verbose
     - name: Run tests
       run: cargo test --verbose
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+    - uses: actions/checkout@v2
     - name: Build container
       run: docker build --tag who_dat_kid:$GITHUB_SHA .
+  publish:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Log into registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+		- name: Push image
+			run: |
+				IMAGE_NAME=${GITHUB_REPOSITORY##*/}
+				IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+
+				# Change all uppercase to lowercase
+				IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+				# Strip git ref prefix from version
+				VERSION=${GITHUB_REF##*/}
+				# Use Docker `latest` tag convention
+				[ "$VERSION" == "master" ] && VERSION=latest
+				echo IMAGE_ID=$IMAGE_ID
+				echo VERSION=$VERSION
+				echo IMAGE_ID=$IMAGE_ID
+				echo docker tag who_dat_kid:$GITHUB_SHA $IMAGE_ID:$VERSION
+				echo docker push $IMAGE_ID:$VERSION
