@@ -54,17 +54,17 @@ fn show_fake_id(ident_request: &str) -> String {
   match ports {
     Ok(ident) => {
       debug!("Ident request: {:?}", trimmed_ident_request);
-      return create_reply(&ident);
+      create_reply(&ident)
     }
     Err(_) => {
       error!("Bogus ident reply: {:?}", trimmed_ident_request);
-      return String::from(IDENT_ERROR);
+      String::from(IDENT_ERROR)
     }
   }
 }
 
 fn get_ports(ident_request: &str) -> Result<Ident, ParseIntError> {
-  return Ident::from_str(ident_request);
+  Ident::from_str(ident_request)
 }
 
 fn create_reply(ident_request: &Ident) -> String {
