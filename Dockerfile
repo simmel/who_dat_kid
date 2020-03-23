@@ -6,6 +6,7 @@ RUN rustup target add x86_64-unknown-linux-musl
 COPY . .
 
 RUN cargo build --release --target x86_64-unknown-linux-musl
+RUN find . -iname "who_dat_kid"
 
 FROM rust:1.42.0-alpine@sha256:fd13af547a7b00e082875567569dfa62501ebdf3468af8bfe52d08b2be109e66
 
