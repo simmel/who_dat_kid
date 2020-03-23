@@ -17,6 +17,8 @@ jobs:
       run: cargo clippy --verbose
     - name: Run tests
       run: cargo test --verbose
+    - name: Add musl target
+      run: rustup target add x86_64-unknown-linux-musl
     - name: Build release for Alpine
       run: cargo build --release --target x86_64-unknown-linux-musl
     - name: Build container
