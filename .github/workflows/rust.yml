@@ -19,7 +19,6 @@ jobs:
     needs: build
     if: github.event_name == 'push'
     steps:
-    - uses: actions/checkout@v2
     - name: Log into registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
     - name: Push image
@@ -36,5 +35,6 @@ jobs:
         echo IMAGE_ID=$IMAGE_ID
         echo VERSION=$VERSION
         echo IMAGE_ID=$IMAGE_ID
-        echo docker tag who_dat_kid:$GITHUB_SHA $IMAGE_ID:$VERSION
+        docker images
+        docker tag who_dat_kid:$GITHUB_SHA $IMAGE_ID:$VERSION
         echo docker push $IMAGE_ID:$VERSION
