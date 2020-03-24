@@ -32,5 +32,4 @@ jobs:
         echo VERSION=$VERSION
         echo IMAGE_ID=$IMAGE_ID
         docker tag who_dat_kid:$GITHUB_SHA $IMAGE_ID:$VERSION
-        docker images
-        echo docker push $IMAGE_ID:$VERSION
+        docker push $IMAGE_ID:$VERSION
