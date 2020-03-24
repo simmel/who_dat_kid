@@ -121,7 +121,7 @@ async fn main() {
     .filter(None, LevelFilter::Info)
     .init();
 
-  let address = "127.0.0.1:1337";
+  let address = "[::]:1337";
   let mut listener = TcpListener::bind(address).await.unwrap();
   info!("Listening on {}", address);
 
