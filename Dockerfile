@@ -13,4 +13,4 @@ COPY --from=builder /usr/src/target/x86_64-unknown-linux-musl/release/who_dat_ki
 
 EXPOSE 1337
 
-CMD ["who_dat_kid"]
+CMD ["/usr/local/bin/who_dat_kid"]
