@@ -21,3 +21,4 @@ tokio = { version = "^0.2", features = [
   "tcp",
 ] }
 futures = "^0.3"
+argh = "^0.1"

@@ -4,6 +4,14 @@ use std::str::FromStr;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::{TcpListener, TcpStream};
 
+#[derive(argh::FromArgs, Debug)]
+/// Who dat kid?
+struct WhoDatKid {
+  /// address to listen to. E.g. localhost:1337
+  #[argh(option, short = 'l', default = r#""[::]:1337".to_string()"#)]
+  listen: String,
+}
+
 async fn handle_connection(mut stream: TcpStream) {
   let mut buffer = [0; 512];
 
@@ -114,6 +122,7 @@ fn correct_reply() {
 
 #[tokio::main]
 async fn main() {
+  let args: WhoDatKid = argh::from_env();
   env_logger::Builder::from_default_env()
     .format_level(true)
     .format_module_path(false)
@@ -121,9 +130,8 @@ async fn main() {
     .filter(None, LevelFilter::Info)
     .init();
 
-  let address = "[::]:1337";
-  let mut listener = TcpListener::bind(address).await.unwrap();
-  info!("Listening on {}", address);
+  let mut listener = TcpListener::bind(&args.listen).await.unwrap();
+  info!("Listening on {}", &args.listen);
 
   loop {
     let (stream, _) = listener.accept().await.unwrap();
