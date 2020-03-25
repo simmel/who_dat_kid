@@ -5,11 +5,18 @@ use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::{TcpListener, TcpStream};
 
 #[derive(argh::FromArgs, Debug)]
-/// Who dat kid?
+#[argh(
+  description = "Who dat kid?",
+  example = "Listen on localhost port 1337 and set log level to debug.\n$ {command_name} -l localhost:1337 -vv",
+  )]
 struct WhoDatKid {
   /// address to listen to. E.g. localhost:1337
   #[argh(option, short = 'l', default = r#""[::]:1337".to_string()"#)]
   listen: String,
+
+  /// control the verbosity of logging. One = info, two = debug
+  #[argh(switch, short = 'v')]
+  verbose: i32,
 }
 
 async fn handle_connection(mut stream: TcpStream) {
@@ -123,11 +130,17 @@ fn correct_reply() {
 #[tokio::main]
 async fn main() {
   let args: WhoDatKid = argh::from_env();
+  let mut loglevel: LevelFilter = LevelFilter::Error;
+  if args.verbose == 1 {
+    loglevel = LevelFilter::Info;
+  } else if args.verbose == 2 {
+    loglevel = LevelFilter::Debug;
+  }
   env_logger::Builder::from_default_env()
     .format_level(true)
     .format_module_path(false)
     .format_timestamp(None)
-    .filter(None, LevelFilter::Info)
+    .filter(None, loglevel)
     .init();
 
   let mut listener = TcpListener::bind(&args.listen).await.unwrap();
