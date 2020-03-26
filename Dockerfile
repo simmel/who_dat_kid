@@ -7,10 +7,10 @@ COPY . .
 
 RUN cargo build --release --target x86_64-unknown-linux-musl
 
-FROM rust:1.42.0-alpine@sha256:fd13af547a7b00e082875567569dfa62501ebdf3468af8bfe52d08b2be109e66
+FROM scratch
 
-COPY --from=builder /usr/src/target/x86_64-unknown-linux-musl/release/who_dat_kid /usr/local/bin/
+COPY --from=builder /usr/src/target/x86_64-unknown-linux-musl/release/who_dat_kid /
 
 EXPOSE 1337
 
-CMD ["/usr/local/bin/who_dat_kid"]
+CMD ["/who_dat_kid"]
