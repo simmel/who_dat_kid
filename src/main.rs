@@ -102,6 +102,12 @@ fn correct_request() {
 }
 
 #[test]
+fn correct_request_with_whitespace() {
+  let reply = show_fake_id(&String::from("13 , 37\r\n"));
+  assert_eq!(reply, String::from("13,37:USERID:UNIX:aerokid\r\n"));
+}
+
+#[test]
 fn correct_ports() {
   let p = get_ports(&String::from("13,37\r\n"));
   assert_eq!(
