@@ -7,8 +7,8 @@ use tokio::net::{TcpListener, TcpStream};
 #[derive(argh::FromArgs, Debug)]
 #[argh(
   description = "Who dat kid?",
-  example = "Listen on localhost port 1337 and set log level to debug.\n$ {command_name} -l localhost:1337 -vv",
-  )]
+  example = "Listen on localhost port 1337 and set log level to debug.\n$ {command_name} -l localhost:1337 -vv"
+)]
 struct WhoDatKid {
   /// address to listen to. E.g. localhost:1337
   #[argh(option, short = 'l', default = r#""[::]:1337".to_string()"#)]
