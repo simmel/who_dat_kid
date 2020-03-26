@@ -44,10 +44,9 @@ impl FromStr for Ident {
 
   fn from_str(s: &str) -> Result<Self, Self::Err> {
     debug!("s: {:#?}", s);
-    let coords: Vec<&str> = s
-      .trim_matches(|p| p == ' ' || p == '\r' || p == '\n')
-      .split(|c| c == ',' || c == ':')
-      .collect();
+
+    let whitespace_cleaned: String = s.chars().filter(|x| !x.is_whitespace()).collect();
+    let coords: Vec<&str> = whitespace_cleaned.split(|c| c == ',' || c == ':').collect();
 
     debug!("coords: {:#?}", coords);
     let remote_port_fromstr = coords[0].parse::<i32>()?;
