@@ -133,7 +133,7 @@ fn correct_reply() {
 }
 
 #[tokio::main]
-async fn main() {
+async fn main() -> tokio::io::Result<()> {
   let args: WhoDatKid = argh::from_env();
   let mut loglevel: LevelFilter = LevelFilter::Error;
   if args.verbose == 1 {
