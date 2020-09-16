@@ -152,7 +152,7 @@ async fn main() {
   info!("Listening on {}", &args.listen);
 
   loop {
-    let (stream, _) = listener.accept().await.unwrap();
+    let (stream, _) = listener.accept().await?;
 
     tokio::spawn(async move {
       handle_connection(stream).await;
