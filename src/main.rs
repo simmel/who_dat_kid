@@ -133,7 +133,7 @@ fn correct_reply() {
 }
 
 #[tokio::main]
-async fn main() -> tokio::io::Result<()> {
+async fn main() {
   let args: WhoDatKid = argh::from_env();
   let mut loglevel: LevelFilter = LevelFilter::Error;
   if args.verbose == 1 {
@@ -152,10 +152,15 @@ async fn main() -> tokio::io::Result<()> {
   info!("Listening on {}", &args.listen);
 
   loop {
-    let (stream, _) = listener.accept().await?;
-
-    tokio::spawn(async move {
-      handle_connection(stream).await;
-    });
+    match listener.accept().await {
+      Ok((stream, _)) =>
+        tokio::spawn(async move {
+          handle_connection(stream).await;
+        }),
+      Err(e) => {
+        error!("Accept failed: {:?}", e);
+        continue;
+      }
+    };
   }
 }
