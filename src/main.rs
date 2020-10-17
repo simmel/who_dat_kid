@@ -132,7 +132,7 @@ fn correct_reply() {
   assert_eq!(p, String::from("13,37:USERID:UNIX:aerokid\r\n"))
 }
 
-#[tokio::main]
+#[tokio::main(flavor = "current_thread")]
 async fn main() {
   let args: WhoDatKid = argh::from_env();
   let mut loglevel: LevelFilter = LevelFilter::Error;
