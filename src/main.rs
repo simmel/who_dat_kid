@@ -148,7 +148,7 @@ async fn main() {
     .filter(None, loglevel)
     .init();
 
-  let mut listener = TcpListener::bind(&args.listen).await.unwrap();
+  let listener = TcpListener::bind(&args.listen).await.unwrap();
   info!("Listening on {}", &args.listen);
 
   loop {
