@@ -13,7 +13,7 @@ license = "ISC"
 [dependencies]
 log = "^0.4"
 env_logger = "^0.7"
-tokio = { version = "^0.3", features = [
+tokio = { version = "^1.0", features = [
   "io-util",
   "macros",
   "net",
