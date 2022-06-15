@@ -1,6 +1,6 @@
 [package]
 name = "who_dat_kid"
-version = "0.2.2"
+version = "0.3.0"
 description = "An identd for my kid"
 authors = ["Simon Lundström <simmel@soy.se>"]
 edition = "2018"
