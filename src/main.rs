@@ -23,14 +23,14 @@ async fn handle_connection(mut stream: TcpStream) {
   let mut buffer = [0; 512];
 
   info!("Connection from: {}", stream.peer_addr().unwrap());
-  stream.read(&mut buffer).await.unwrap();
+  stream.read_exact(&mut buffer).await.unwrap();
 
   let request = String::from_utf8_lossy(&buffer)
     .trim_end_matches('\0')
     .to_string();
   debug!("request: {:#?}", request);
   let reply = show_fake_id(&request);
-  stream.write(reply.as_bytes()).await.unwrap();
+  stream.write_all(reply.as_bytes()).await.unwrap();
 }
 
 #[derive(Debug, PartialEq)]
