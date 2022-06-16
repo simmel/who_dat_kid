@@ -1,4 +1,4 @@
-FROM rust:1.49.0-slim@sha256:2108dd7ec217543fa1c4be10135d0329960ce2dc5bcbc0f4f3e9c23ac17238a2 as builder
+FROM rust:1.45.2-slim-stretch@sha256:dc0f86106ce18a2bd2ab706eeb163f1867435b94ba32a070984ba103126b79f6 as builder
 WORKDIR /usr/src
 
 RUN rustup target add x86_64-unknown-linux-musl
