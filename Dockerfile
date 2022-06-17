@@ -3,6 +3,8 @@ WORKDIR /usr/src
 
 RUN rustup target add x86_64-unknown-linux-musl
 
+RUN cargo search apa >/dev/null
+
 COPY . .
 
 RUN cargo build --release --target x86_64-unknown-linux-musl
