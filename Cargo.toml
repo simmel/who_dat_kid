@@ -14,7 +14,7 @@ license = "ISC"
 log = "^0.4"
 env_logger = "^0.9"
 regex = "^1.5"
-tokio = { version = "^1.8", features = [
+tokio = { version = "^1.18", features = [
   "io-util",
   "macros",
   "net",
